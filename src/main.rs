@@ -1,24 +1,38 @@
-use bevy::{math::bool, prelude::*, text::TextPlugin};
+use bevy::{math::bool, prelude::*, sprite::Material2dPlugin, text::TextPlugin};
 use bevy_inspector_egui::{bevy_egui::EguiPlugin, prelude::*, quick::WorldInspectorPlugin};
 
-mod camera;
-mod world;
+mod asset_loader;
 mod brush;
 mod building;
+mod camera;
 mod citizens;
-mod asset_loader;
 mod ui;
-use crate::{asset_loader::AssetLoaderPlugin, brush::{BrushChanged, BrushPlugin, BrushType}, building::BuildingPlugin, camera::CameraPlugin, citizens::PopulationPlugin, ui::UiPlugin, world::WorldPlugin};
+mod world;
+mod zoning;
+use crate::{
+    asset_loader::AssetLoaderPlugin,
+    brush::{BrushChanged, BrushPlugin, BrushType},
+    building::BuildingPlugin,
+    camera::CameraPlugin,
+    citizens::PopulationPlugin,
+    ui::UiPlugin,
+    world::WorldPlugin,
+    zoning::ZoneType,
+};
 
 #[derive(Resource)]
 pub struct GameState {
     brush_type: BrushType,
+    zone_type: ZoneType,
+    grid_enabled: bool,
 }
 
 fn main() {
     App::new()
         .insert_resource(GameState {
-            brush_type: BrushType::Building
+            brush_type: BrushType::Building,
+            zone_type: ZoneType::Residential,
+            grid_enabled: false,
         })
         .add_event::<BrushChanged>()
         .add_plugins(DefaultPlugins)

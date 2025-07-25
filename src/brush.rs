@@ -1,9 +1,10 @@
 use crate::{GameState, asset_loader::SceneAssets, building::Building, world::Ground};
 use bevy::{input::mouse::MouseButtonInput, picking::window, prelude::*};
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum BrushType {
     Road,
     Building,
+    Zone,
 }
 
 #[derive(Event)]
@@ -58,26 +59,27 @@ fn handle_brush_press(
         println!("Spawning at: {}", cursor_position);
         match state.brush_type {
             BrushType::Road => {
-                commands.spawn((SceneRoot(scene_assets.road.clone()),
-                Road,
-                Transform {
-                    translation: point,
-                    ..default()
-                }
-            ));
-            },
+                commands.spawn((
+                    SceneRoot(scene_assets.road.clone()),
+                    Road,
+                    Transform {
+                        translation: point,
+                        ..default()
+                    },
+                ));
+            }
             BrushType::Building => {
                 commands.spawn((
-                SceneRoot(scene_assets.building_one.clone()),
-                Building,
-                Transform {
-                    translation: point,
-                    ..default()
-                }
-            )
-        );
-    }
-}
+                    SceneRoot(scene_assets.building_one.clone()),
+                    Building,
+                    Transform {
+                        translation: point,
+                        ..default()
+                    },
+                ));
+            }
+            _ => {}
+        }
     }
 }
 fn move_brush(
@@ -108,7 +110,10 @@ fn move_brush(
         return;
     };
     let point = ray.get_point(distance);
-
+    // make sure the point is actually on the world's bounds
+    if point.x.abs() > 100.0 || point.z.abs() > 100.0 {
+        return;
+    }
     // Draw a circle just above the ground plane at that position.
     gizmos.circle(
         Isometry3d::new(

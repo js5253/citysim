@@ -1,5 +1,6 @@
 use bevy::prelude::*;
-use rand::{Rng, random_range};
+use bevy_rand::prelude::{Entropy, WyRand};
+use rand::Rng;
 
 use crate::asset_loader::SceneAssets;
 
@@ -9,26 +10,28 @@ pub struct Citizen;
 #[derive(Component)]
 pub struct Happiness(f32);
 
-fn spawn_individuals(mut commands: Commands, scene_assets: Res<SceneAssets>) {
+fn spawn_individuals(
+    mut commands: Commands,
+    scene_assets: Res<SceneAssets>,
+    mut q_source: Single<&mut Entropy<WyRand>>,
+) {
     //TODO global rng
-    let mut rng = rand::rng();
     for _ in 0..=500 {
-        let pos = Vec3::new(rng.random(), 5., rng.random());
+        let pos = Vec3::new(q_source.random(), 5., q_source.random());
         commands.spawn((
             Citizen,
             Happiness(100.),
-            SceneRoot(
-                scene_assets.citizen_one.clone()),
-                Transform {
-                    translation: 40.*pos,
-                    ..default()
-                },
+            SceneRoot(scene_assets.citizen_one.clone()),
+            Transform {
+                translation: 40. * pos,
+                ..default()
+            },
         ));
     }
 }
 
 fn calculate_happiness() {
-    let a = random_range(0..=10);
+    // let a = random_range(0..=10);
 }
 pub struct PopulationPlugin;
 
