@@ -7,9 +7,12 @@ pub struct CameraPlugin;
 
 fn spawn_camera(mut commands: Commands) {
     commands.spawn((
-        Camera3d::default(),
-        // commands.spawn(Camera2d {}),
-        // Camera2d::default(),
+        // Camera3d::default(),
+        Camera2d::default(),
+        Camera {
+            order: 1,
+            ..Default::default()
+        },
         Transform::from_xyz(15.0, 5.0, 15.0).looking_at(Vec3::ZERO, Vec3::Y),
     ));
 }
@@ -69,6 +72,6 @@ fn handle_camera_movement(
 impl Plugin for CameraPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_camera);
-        app.add_systems(Update, handle_camera_movement);
+        // app.add_systems(Update, handle_camera_movement);
     }
 }

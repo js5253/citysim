@@ -1,4 +1,4 @@
-use crate::{GameState, asset_loader::SceneAssets, building::Building, world::Ground};
+use crate::{asset_loader::SceneAssets, building::Building, roads::{Road, RoadGrid}, ui::GridMarker, world::Ground, GameState};
 use bevy::{input::mouse::MouseButtonInput, picking::window, prelude::*};
 #[derive(Clone, PartialEq)]
 pub enum BrushType {
@@ -13,10 +13,6 @@ pub struct BrushChanged(pub BrushType);
 pub struct BrushPlugin;
 #[derive(Component)]
 pub struct Brush;
-
-///TODO: move into its own type!!!!!!
-#[derive(Component)]
-pub struct Road;
 
 fn spawn_brush(mut commands: Commands) {
     commands.spawn((Brush, Transform::default()));
@@ -34,6 +30,8 @@ fn handle_brush_press(
     ground: Single<&GlobalTransform, With<Ground>>,
     camera_query: Single<(&Camera, &GlobalTransform)>,
     state: Res<GameState>,
+    mut meshes: ResMut<Assets<Mesh>>,
+    mut materials: ResMut<Assets<ColorMaterial>>,
 ) {
     let Ok(window) = windows.single() else {
         return;
@@ -66,6 +64,11 @@ fn handle_brush_press(
                         translation: point,
                         ..default()
                     },
+                    RoadGrid {
+                        mesh: Mesh2d(meshes.add(Rectangle::new(250., 250.))),
+                        material: MeshMaterial2d(materials.add(Color::linear_rgb(0.5, 0.5, 0.2))),
+                        marker: GridMarker
+                    }
                 ));
             }
             BrushType::Building => {

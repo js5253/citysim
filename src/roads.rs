@@ -1,11 +1,18 @@
 use bevy::prelude::*;
 
+use crate::ui::GridMarker;
+
 pub struct RoadPlugin;
 
-fn setup() {}
+// fn setup() {}#[derive(Component)]
+#[derive(Component)]
+pub struct Road;
 
-impl Plugin for RoadPlugin {
-    fn build(&self, app: &mut App) {
-        app.add_systems(Update, check_for_road);
-    }
+
+#[derive(Bundle)]
+pub struct RoadGrid {
+    pub mesh: Mesh2d,
+    pub material: MeshMaterial2d<ColorMaterial>,
+    pub marker: GridMarker
+
 }

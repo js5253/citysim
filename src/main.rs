@@ -1,4 +1,5 @@
 use bevy::{math::bool, prelude::*, sprite::Material2dPlugin, text::TextPlugin};
+use bevy_editor_pls::EditorPlugin;
 use bevy_inspector_egui::{bevy_egui::EguiPlugin, prelude::*, quick::WorldInspectorPlugin};
 
 mod asset_loader;
@@ -9,15 +10,10 @@ mod citizens;
 mod ui;
 mod world;
 mod zoning;
+mod roads;
+mod debug;
 use crate::{
-    asset_loader::AssetLoaderPlugin,
-    brush::{BrushChanged, BrushPlugin, BrushType},
-    building::BuildingPlugin,
-    camera::CameraPlugin,
-    citizens::PopulationPlugin,
-    ui::UiPlugin,
-    world::WorldPlugin,
-    zoning::ZoneType,
+    asset_loader::AssetLoaderPlugin, brush::{BrushChanged, BrushPlugin, BrushType}, building::BuildingPlugin, camera::CameraPlugin, citizens::PopulationPlugin, debug::DebugPlugin, ui::UiPlugin, world::WorldPlugin, zoning::ZoneType
 };
 
 #[derive(Resource)]
@@ -36,6 +32,7 @@ fn main() {
         })
         .add_event::<BrushChanged>()
         .add_plugins(DefaultPlugins)
+        .add_plugins(DebugPlugin)
         .add_plugins(EguiPlugin::default())
         .add_plugins(WorldInspectorPlugin::new())
         .add_plugins(PopulationPlugin)

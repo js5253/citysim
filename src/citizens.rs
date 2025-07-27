@@ -2,7 +2,9 @@ use bevy::prelude::*;
 use bevy_rand::prelude::{Entropy, WyRand};
 use rand::Rng;
 
-use crate::asset_loader::SceneAssets;
+use crate::{asset_loader::SceneAssets, building::Home};
+
+const CITIZEN_COUNT: usize = 500;
 
 #[derive(Component)]
 pub struct Citizen;
@@ -16,7 +18,7 @@ fn spawn_individuals(
     mut q_source: Single<&mut Entropy<WyRand>>,
 ) {
     //TODO global rng
-    for _ in 0..=500 {
+    for _ in 0..=CITIZEN_COUNT {
         let pos = Vec3::new(q_source.random(), 5., q_source.random());
         commands.spawn((
             Citizen,
