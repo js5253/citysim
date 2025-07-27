@@ -7,7 +7,7 @@ pub struct CameraPlugin;
 
 fn spawn_camera(mut commands: Commands) {
     commands.spawn((
-        // Camera3d::default(),
+        Camera3d::default(),
         Camera2d::default(),
         Camera {
             order: 1,

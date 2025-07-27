@@ -29,7 +29,9 @@ fn spawn_buildings(mut commands: Commands, scene_assets: Res<SceneAssets>) {
     commands.spawn((Destination, Transform::default(), Alias(String::from("7451 W Byte St"))));
     commands.spawn((Destination, Transform::default(), Alias(String::from("2005 W Penguin Av")), Home));
 }
-
+fn spawn_school() {
+    
+}
 impl Plugin for BuildingPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, spawn_buildings);

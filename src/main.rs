@@ -1,6 +1,9 @@
+#![allow(unused)]
+
 use bevy::{math::bool, prelude::*, sprite::Material2dPlugin, text::TextPlugin};
 use bevy_editor_pls::EditorPlugin;
 use bevy_inspector_egui::{bevy_egui::EguiPlugin, prelude::*, quick::WorldInspectorPlugin};
+use bevy_rand::{plugin::EntropyPlugin, prelude::WyRand};
 
 mod asset_loader;
 mod brush;
@@ -32,6 +35,7 @@ fn main() {
         })
         .add_event::<BrushChanged>()
         .add_plugins(DefaultPlugins)
+        .add_plugins(EntropyPlugin::<WyRand>::default())
         .add_plugins(DebugPlugin)
         .add_plugins(EguiPlugin::default())
         .add_plugins(WorldInspectorPlugin::new())
